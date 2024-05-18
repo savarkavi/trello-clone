@@ -50,7 +50,7 @@ export const createBoard = async ({
       },
     });
 
-    revalidatePath("/organization/org_2gPHL0uvWgcVHO4mI1B1iwsEwAB");
+    revalidatePath(`/organization/${orgId}`);
     return JSON.parse(JSON.stringify({ success: true, board }));
   } catch (error) {
     console.log("Something went wrong");

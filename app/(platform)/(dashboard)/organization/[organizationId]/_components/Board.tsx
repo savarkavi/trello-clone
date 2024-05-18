@@ -32,7 +32,7 @@ const Board = ({ board }: { board: BoardProps }) => {
             "object-cover rounded-lg",
             isLoaded ? "opacity-100" : "opacity-0"
           )}
-          onLoadingComplete={() => setIsLoaded(true)}
+          onLoad={() => setIsLoaded(true)}
         />
         <div
           className={cn(

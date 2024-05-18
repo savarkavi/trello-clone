@@ -16,6 +16,7 @@ import { Skeleton } from "./ui/skeleton";
 import { Check, LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useOrganization } from "@clerk/nextjs";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 const ImagesArr = [
   {
@@ -50,6 +51,10 @@ const DialogForm = ({ children }: { children: React.ReactNode }) => {
   const [images, setImages] = useState(ImagesArr);
   const [selectedImg, setSelectedImg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const pathname = usePathname();
+  const params = useParams();
+  const router = useRouter();
 
   const { organization } = useOrganization();
 
@@ -90,7 +95,14 @@ const DialogForm = ({ children }: { children: React.ReactNode }) => {
       setSelectedImg("");
       setIsDialogOpen(false);
       toast.success("New Board created!");
+
+      if (pathname.includes("/board")) {
+        if (res.board.id !== params.boardId) {
+          return router.push(`/board/${res.board.id}`);
+        }
+      }
     } catch (error) {
+      console.log(error);
       console.log("An unexpected error occured");
     } finally {
       setLoading(false);
@@ -123,7 +135,7 @@ const DialogForm = ({ children }: { children: React.ReactNode }) => {
                     "rounded-lg",
                     selectedImg === img.src && "opacity-50"
                   )}
-                  onLoadingComplete={() => onImageLoad(i)}
+                  onLoad={() => onImageLoad(i)}
                 />
                 {selectedImg === img.src && (
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">

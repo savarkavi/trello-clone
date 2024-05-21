@@ -1,7 +1,8 @@
 import { Card, List } from "@prisma/client";
 import ListForm from "./ListForm";
+import ListItem from "./ListItem";
 
-type ListWithCards = List & { cards: Card[] };
+export type ListWithCards = List & { cards: Card[] };
 
 interface ListContainerProps {
   lists: ListWithCards[];
@@ -10,7 +11,10 @@ interface ListContainerProps {
 
 const ListContainer = ({ lists, boardId }: ListContainerProps) => {
   return (
-    <div>
+    <div className="flex flex-wrap items-center gap-4">
+      {lists.map((list) => (
+        <ListItem key={list.id} list={list} />
+      ))}
       <ListForm boardId={boardId} />
     </div>
   );

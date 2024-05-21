@@ -14,6 +14,7 @@ import toast from "react-hot-toast";
 const ListForm = ({ boardId }: { boardId: string }) => {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,18 +27,20 @@ const ListForm = ({ boardId }: { boardId: string }) => {
         return toast.error(res.error.issues[0].message);
       }
 
+      setTitle("");
       toast.success("New List created");
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+      setIsFormOpen(false);
     }
   };
 
   return (
-    <Popover>
+    <Popover open={isFormOpen} onOpenChange={setIsFormOpen}>
       <PopoverTrigger>
-        <div className="bg-slate-100 py-2 pl-2 pr-20 rounded-lg flex items-center gap-2 font-semibold">
+        <div className="bg-slate-100 py-3 pl-2 pr-20 rounded-lg flex items-center gap-2 font-semibold w-[250px]">
           <Plus className="w-4" />
           Add a list
         </div>

@@ -9,12 +9,12 @@ const BoardIdPage = async ({ params }: { params: { boardId: string } }) => {
     include: {
       cards: {
         orderBy: {
-          order: "desc",
+          order: "asc",
         },
       },
     },
     orderBy: {
-      order: "desc",
+      order: "asc",
     },
   });
 

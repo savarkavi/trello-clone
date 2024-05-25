@@ -1,6 +1,6 @@
 "use client";
 
-import { createList } from "@/actions/create-list";
+import { createCard } from "@/actions/create-card";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/popover";
 import { LoaderCircle, Plus } from "lucide-react";
 import { FormEvent, useState } from "react";
+import { ListWithCards } from "./ListContainer";
 import toast from "react-hot-toast";
 
-const ListForm = ({ boardId }: { boardId: string }) => {
+const CardForm = ({ list }: { list: ListWithCards }) => {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -21,14 +22,18 @@ const ListForm = ({ boardId }: { boardId: string }) => {
     setLoading(true);
 
     try {
-      const res = await createList({ title, boardId });
+      const res = await createCard({
+        title,
+        listId: list.id,
+        boardId: list.boardId,
+      });
 
       if (!res.success) {
         return toast.error(res.error.issues[0].message);
       }
 
       setTitle("");
-      toast.success("New List created");
+      toast.success("New Card created");
     } catch (error) {
       console.log(error);
     } finally {
@@ -42,18 +47,19 @@ const ListForm = ({ boardId }: { boardId: string }) => {
       <PopoverTrigger asChild>
         <Button
           variant="ghost"
-          className="bg-slate-200 py-6 flex items-center justify-start gap-2 w-[250px] text-base"
+          className="flex items-center gap-2 justify-start py-6 text-gray-700"
         >
-          <Plus className="w-4" />
-          Add a list
+          <Plus className="w-5" />
+          <span className="text-base">Add a card</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent>
         <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-          <input
+          <textarea
             required
             placeholder="type here..."
-            className="outline-none border p-2 rounded-lg"
+            rows={6}
+            className="outline-none border p-2 rounded-lg text-sm"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -66,4 +72,4 @@ const ListForm = ({ boardId }: { boardId: string }) => {
   );
 };
 
-export default ListForm;
+export default CardForm;

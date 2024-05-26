@@ -1,5 +1,3 @@
-"use client";
-
 import { createList } from "@/actions/create-list";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +8,15 @@ import {
 import { LoaderCircle, Plus } from "lucide-react";
 import { FormEvent, useState } from "react";
 import toast from "react-hot-toast";
+import { ListWithCards } from "./ListContainer";
 
-const ListForm = ({ boardId }: { boardId: string }) => {
+const ListForm = ({
+  boardId,
+  onListCreated,
+}: {
+  boardId: string;
+  onListCreated: (newList: ListWithCards) => void;
+}) => {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -28,6 +33,7 @@ const ListForm = ({ boardId }: { boardId: string }) => {
       }
 
       setTitle("");
+      onListCreated(res.newList);
       toast.success("New List created");
     } catch (error) {
       console.log(error);

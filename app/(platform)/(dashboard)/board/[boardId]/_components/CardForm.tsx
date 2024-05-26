@@ -11,8 +11,15 @@ import { LoaderCircle, Plus } from "lucide-react";
 import { FormEvent, useState } from "react";
 import { ListWithCards } from "./ListContainer";
 import toast from "react-hot-toast";
+import { Card } from "@prisma/client";
 
-const CardForm = ({ list }: { list: ListWithCards }) => {
+const CardForm = ({
+  list,
+  onCardCreated,
+}: {
+  list: ListWithCards;
+  onCardCreated: (newCard: Card) => void;
+}) => {
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -33,6 +40,7 @@ const CardForm = ({ list }: { list: ListWithCards }) => {
       }
 
       setTitle("");
+      onCardCreated(res.newCard);
       toast.success("New Card created");
     } catch (error) {
       console.log(error);

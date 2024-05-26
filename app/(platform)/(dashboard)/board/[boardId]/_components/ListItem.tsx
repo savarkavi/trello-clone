@@ -7,7 +7,17 @@ import ListOptions from "./ListOptions";
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import CardItem from "./CardItem";
 
-const ListItem = ({ list, index }: { list: ListWithCards; index: number }) => {
+const ListItem = ({
+  list,
+  index,
+  boardId,
+  onCardCreated,
+}: {
+  list: ListWithCards;
+  index: number;
+  boardId: string;
+  onCardCreated: (newCard: Card) => void;
+}) => {
   return (
     <Draggable draggableId={list.id} index={index}>
       {(provided) => (
@@ -29,13 +39,18 @@ const ListItem = ({ list, index }: { list: ListWithCards; index: number }) => {
                 {...provided.droppableProps}
               >
                 {list.cards.map((card: Card, i) => (
-                  <CardItem key={card.id} card={card} index={i} />
+                  <CardItem
+                    key={card.id}
+                    card={card}
+                    index={i}
+                    boardId={boardId}
+                  />
                 ))}
                 {provided.placeholder}
               </div>
             )}
           </Droppable>
-          <CardForm list={list} />
+          <CardForm list={list} onCardCreated={onCardCreated} />
         </div>
       )}
     </Draggable>

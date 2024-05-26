@@ -27,10 +27,6 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 const ListContainer = ({ lists, boardId }: ListContainerProps) => {
   const [listsData, setListsData] = useState(lists);
 
-  useEffect(() => {
-    setListsData(listsData);
-  }, [listsData]);
-
   const onDragEnd = (result: any) => {
     const { destination, source, type } = result;
 
@@ -131,6 +127,25 @@ const ListContainer = ({ lists, boardId }: ListContainerProps) => {
     }
   };
 
+  const onListCreated = (newList: ListWithCards) => {
+    setListsData([...listsData, newList]);
+  };
+
+  const onCardCreated = (newCard: Card) => {
+    console.log(newCard);
+
+    let listToUpdate = listsData.find((list) => list.id === newCard.listId);
+    if (listToUpdate) {
+      const updatedLists = listsData.filter((list) =>
+        list.id === listToUpdate?.id
+          ? { ...listToUpdate, cards: [...listToUpdate.cards, newCard] }
+          : list
+      );
+
+      setListsData(updatedLists);
+    }
+  };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="lists" type="list" direction="horizontal">
@@ -141,10 +156,16 @@ const ListContainer = ({ lists, boardId }: ListContainerProps) => {
             ref={provided.innerRef}
           >
             {listsData.map((list, i) => (
-              <ListItem key={list.id} list={list} index={i} />
+              <ListItem
+                key={list.id}
+                list={list}
+                index={i}
+                boardId={boardId}
+                onCardCreated={onCardCreated}
+              />
             ))}
             {provided.placeholder}
-            <ListForm boardId={boardId} />
+            <ListForm boardId={boardId} onListCreated={onListCreated} />
           </div>
         )}
       </Droppable>

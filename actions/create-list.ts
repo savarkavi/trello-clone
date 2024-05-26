@@ -43,6 +43,13 @@ export const createList = async ({ title, boardId }: CreateListParams) => {
         boardId,
         order: newOrder,
       },
+      include: {
+        cards: {
+          orderBy: {
+            order: "asc",
+          },
+        },
+      },
     });
 
     revalidatePath(`/board/${boardId}`);

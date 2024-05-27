@@ -12,11 +12,15 @@ const ListItem = ({
   index,
   boardId,
   onCardCreated,
+  onListDelete,
+  onCardDelete,
 }: {
   list: ListWithCards;
   index: number;
   boardId: string;
   onCardCreated: (newCard: Card) => void;
+  onListDelete: (listId: string) => void;
+  onCardDelete: (cardId: string, listId: string) => void;
 }) => {
   return (
     <Draggable draggableId={list.id} index={index}>
@@ -29,7 +33,7 @@ const ListItem = ({
         >
           <div className="py-3 px-4 flex items-center justify-between gap-2">
             <div>{list.title}</div>
-            <ListOptions list={list} />
+            <ListOptions list={list} onListDelete={onListDelete} />
           </div>
           <Droppable droppableId={list.id} type="card">
             {(provided) => (
@@ -44,6 +48,7 @@ const ListItem = ({
                     card={card}
                     index={i}
                     boardId={boardId}
+                    onCardDelete={onCardDelete}
                   />
                 ))}
                 {provided.placeholder}

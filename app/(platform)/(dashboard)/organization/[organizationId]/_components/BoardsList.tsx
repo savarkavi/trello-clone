@@ -39,10 +39,9 @@ const BoardsList = async () => {
           <Board key={board.id} board={board} />
         ))}
         <DialogForm>
-          <div className="flex flex-col items-center justify-between gap-2 w-full sm:w-[250px] h-[150px] 2xl:w-[300px] 2xl:h-[200px] px-6 pt-6 pb-2 rounded-lg bg-gray-200 cursor-pointer hover:bg-slate-200/70">
+          <div className="flex flex-col items-center justify-center gap-2 w-full sm:w-[250px] h-[150px] 2xl:w-[300px] 2xl:h-[200px] px-6 pb-2 rounded-lg bg-gray-200 cursor-pointer hover:bg-slate-200/70">
             <p className="font-semibold lg:text-xl">Create new Board</p>
-            <span className="text-sm lg:text-base">5 remaining</span>
-            <div className="self-end">
+            {/* <div className="self-end">
               <TooltipProvider>
                 <Tooltip delayDuration={0}>
                   <TooltipTrigger asChild>
@@ -56,7 +55,7 @@ const BoardsList = async () => {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-            </div>
+            </div> */}
           </div>
         </DialogForm>
       </div>

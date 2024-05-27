@@ -7,6 +7,7 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { useEffect, useState } from "react";
 import { updateListOrder } from "@/actions/update-list-order";
 import { updateCardOrder } from "@/actions/update-card-order";
+import { updateList } from "@/actions/update-list";
 
 export type ListWithCards = List & { cards: Card[] };
 
@@ -131,17 +132,35 @@ const ListContainer = ({ lists, boardId }: ListContainerProps) => {
     setListsData([...listsData, newList]);
   };
 
+  const onListDelete = (listId: string) => {
+    const updatedLists = listsData.filter((list) => list.id !== listId);
+    setListsData(updatedLists);
+  };
+
   const onCardCreated = (newCard: Card) => {
     console.log(newCard);
 
-    let listToUpdate = listsData.find((list) => list.id === newCard.listId);
-    if (listToUpdate) {
-      const updatedLists = listsData.filter((list) =>
-        list.id === listToUpdate?.id
-          ? { ...listToUpdate, cards: [...listToUpdate.cards, newCard] }
-          : list
-      );
+    const updatedLists = listsData.map((list) =>
+      list.id === newCard.listId
+        ? { ...list, cards: [...list.cards, newCard] }
+        : list
+    );
 
+    setListsData(updatedLists);
+  };
+
+  const onCardDelete = (cardId: string, listId: string) => {
+    let list = listsData.find((list) => list.id === listId);
+
+    if (list) {
+      const updatedList = {
+        ...list,
+        cards: list?.cards.filter((card) => card.id !== cardId),
+      };
+
+      const updatedLists = listsData.map((list) =>
+        list.id === updatedList.id ? updatedList : list
+      );
       setListsData(updatedLists);
     }
   };
@@ -162,6 +181,8 @@ const ListContainer = ({ lists, boardId }: ListContainerProps) => {
                 index={i}
                 boardId={boardId}
                 onCardCreated={onCardCreated}
+                onListDelete={onListDelete}
+                onCardDelete={onCardDelete}
               />
             ))}
             {provided.placeholder}

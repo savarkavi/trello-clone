@@ -63,10 +63,10 @@ const CardForm = ({
       </PopoverTrigger>
       <PopoverContent>
         <form className="flex flex-col gap-8" onSubmit={onSubmit}>
-          <textarea
+          <input
             required
             placeholder="type here..."
-            rows={6}
+            // rows={6}
             className="outline-none border p-2 rounded-lg text-sm"
             value={title}
             onChange={(e) => setTitle(e.target.value)}

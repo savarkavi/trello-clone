@@ -14,7 +14,13 @@ import { FormEvent, useState } from "react";
 import { updateList } from "@/actions/update-list";
 import { cn } from "@/lib/utils";
 
-const ListOptions = ({ list }: { list: ListWithCards }) => {
+const ListOptions = ({
+  list,
+  onListDelete,
+}: {
+  list: ListWithCards;
+  onListDelete: (listId: string) => void;
+}) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [title, setTitle] = useState("");
@@ -23,6 +29,7 @@ const ListOptions = ({ list }: { list: ListWithCards }) => {
     setDeleteLoading(true);
     try {
       await deleteList({ listId: id, boardId: list.boardId });
+      onListDelete(id);
       toast.success("List deleted");
     } catch (error) {
       toast.error("Failed to delete the list");

@@ -35,20 +35,11 @@ const SidebarItem = ({
       icon: <Layout />,
       href: `/organization/${organization.id}`,
     },
-    {
-      label: "Activity",
-      icon: <Activity />,
-      href: `/organization/${organization.id}/activity`,
-    },
+
     {
       label: "Settings",
       icon: <Settings />,
       href: `/organization/${organization.id}/settings`,
-    },
-    {
-      label: "Billing",
-      icon: <CreditCard />,
-      href: `/organization/${organization.id}/billing`,
     },
   ];
 

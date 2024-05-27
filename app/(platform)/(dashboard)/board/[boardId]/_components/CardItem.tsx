@@ -8,18 +8,21 @@ import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { updateCard } from "@/actions/update-card";
 import toast from "react-hot-toast";
+import { deleteCard } from "@/actions/delete-card";
 
 const CardItem = ({
   card,
   index,
   boardId,
+  onCardDelete,
 }: {
   card: Card;
   index: number;
   boardId: string;
+  onCardDelete: (cardId: string, listId: string) => void;
 }) => {
   const [title, setTitle] = useState(card.title);
-  const [desc, setDesc] = useState("");
+  const [desc, setDesc] = useState(card.description);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +31,7 @@ const CardItem = ({
       const res = await updateCard({
         cardId: card.id,
         title,
-        description: desc,
+        description: desc ? desc : "",
         boardId,
       });
 
@@ -38,6 +41,19 @@ const CardItem = ({
 
       toast.success("Card Info updated");
     } catch (error) {
+      toast.error("Failed to update");
+      console.log(error);
+    }
+  };
+
+  const handleDeleteCard = async () => {
+    try {
+      await deleteCard({ listId: card.listId, cardId: card.id });
+
+      onCardDelete(card.id, card.listId);
+      toast.success("Card deleted");
+    } catch (error) {
+      toast.error("Failed to delete the card");
       console.log(error);
     }
   };
@@ -80,12 +96,17 @@ const CardItem = ({
               rows={4}
               id="cardDesc"
               className="p-3 rounded-lg outline-none bg-transparent border border-black"
-              value={desc}
+              value={desc ? desc : ""}
               onChange={(e) => setDesc(e.target.value)}
             />
           </div>
           <div className="mt-4 flex items-center gap-2 justify-between">
-            <Button className="bg-red-500 hover:bg-red-600">Delete card</Button>
+            <div
+              className="bg-red-500 hover:bg-red-600 p-3 text-white rounded-lg text-sm cursor-pointer"
+              onClick={handleDeleteCard}
+            >
+              Delete card
+            </div>
             <Button type="submit" className="bg-green-500 hover:bg-green-600">
               Save
             </Button>

@@ -50,6 +50,7 @@ export const createCard = async ({
       },
     });
 
+    revalidatePath(`/board/${boardId}`);
     return JSON.parse(JSON.stringify({ success: true, newCard }));
   } catch (error) {
     console.log("Something went wrong");
